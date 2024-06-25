@@ -1,0 +1,16 @@
+# catalogue
+catalogue/migrations/*
+!catalogue/migrations/__init__.py
+
+#src folder
+src/
+
+# env file
+.env
+
+# Cache
+.DS_Store
+*.pyc
+
+# local db
+db.sqlite3

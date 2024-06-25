@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package masterdata;
+
+service MasterDataService {
+    rpc GetProduct(GetProductRequest) returns (ProductResponse);
+    rpc CreateProduct(CreateProductRequest) returns (ProductResponse);
+    rpc UpdateProduct(UpdateProductRequest) returns (ProductResponse);
+    rpc DeleteProduct(DeleteProductRequest) returns (Empty);
+    rpc ListProducts(Empty) returns (ListProductsResponse);
+}
+
+message GetProductRequest {
+    int32 id = 1;
+}
+
+message CreateProductRequest {
+    string name = 1;
+    string description = 2;
+    int32 category_id = 3;
+    int32 brand_id = 4;
+    double base_price = 5;
+    int32 stock = 6;
+    string sku = 7;
+    double weight = 8;
+    string dimensions = 9;
+    bool is_active = 10;
+    repeated ProductImage images = 11;
+    repeated ProductAttribute attributes = 12;
+    repeated ProductVariant variants = 13;
+}
+
+message UpdateProductRequest {
+    int32 id = 1;
+    string name = 2;
+    string description = 3;
+    int32 category_id = 4;
+    int32 brand_id = 5;
+    double base_price = 6;
+    int32 stock = 7;
+    string sku = 8;
+    double weight = 9;
+    string dimensions = 10;
+    bool is_active = 11;
+    repeated ProductImage images = 12;
+    repeated ProductAttribute attributes = 13;
+    repeated ProductVariant variants = 14;
+}
+
+message DeleteProductRequest {
+    int32 id = 1;
+}
+
+message ProductImage {
+    string image_url = 1;
+    string alt_text = 2;
+    bool is_primary = 3;
+}
+
+message ProductAttribute {
+    string name = 1;
+    string value = 2;
+}
+
+message ProductVariant {
+    string name = 1;
+    map<string, string> attributes = 2;
+    double price = 3;
+    int32 stock = 4;
+    string sku = 5;
+    string image_url = 6;
+}
+
+message ProductResponse {
+    int32 id = 1;
+    string name = 2;
+    string description = 3;
+    int32 category_id = 4;
+    int32 brand_id = 5;
+    double base_price = 6;
+    int32 stock = 7;
+    string sku = 8;
+    double weight = 9;
+    string dimensions = 10;
+    bool is_active = 11;
+    repeated ProductImage images = 12;
+    repeated ProductAttribute attributes = 13;
+    repeated ProductVariant variants = 14;
+}
+
+message ListProductsResponse {
+    repeated ProductResponse products = 1;
+}
+
+message Empty {}
