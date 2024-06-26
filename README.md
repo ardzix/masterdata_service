@@ -45,7 +45,6 @@ This project is a Django-based web application with gRPC support for managing a 
 1. Clone the repository:
 
 ```bash
-Copy code
 git clone https://github.com/your-username/your-repo.git
 cd your-repo
 ```
@@ -53,7 +52,6 @@ cd your-repo
 2. Create a virtual environment:
 
 ```bash
-Copy code
 python3 -m venv venv
 source venv/bin/activate
 ```
@@ -61,21 +59,18 @@ source venv/bin/activate
 3. Install dependencies:
 
 ```bash
-Copy code
 pip install -r requirements.txt
 ```
 
 4. Apply migrations:
 
 ```bash
-Copy code
 python manage.py migrate
 ```
 
 5. Create a superuser:
 
 ```bash
-Copy code
 python manage.py createsuperuser
 ```
 
@@ -84,14 +79,12 @@ python manage.py createsuperuser
 1. Build the Docker image:
 
 ```bash
-Copy code
 docker build -t my-django-app .
 ```
 
 2. Run the Docker container:
 
 ```bash
-Copy code
 docker run -p 8000:8000 -p 50051:50051 my-django-app
 ```
 
@@ -100,14 +93,12 @@ Alternatively, use Docker Compose:
 1. Build the Docker images:
 
 ```bash
-Copy code
 docker-compose build
 ```
 
 2. Run the Docker containers:
 
 ```bash
-Copy code
 docker-compose up
 ```
 
@@ -118,14 +109,12 @@ docker-compose up
 1. Start the Django development server:
 
 ```bash
-Copy code
 python manage.py runserver
 ```
 
 2. Start the gRPC server:
 
 ```bash
-Copy code
 python server.py
 ```
 
@@ -138,7 +127,6 @@ Open your browser and go to <http://localhost:8000/admin>. Log in with the super
 Use the provided `grpc_client.py` script to interact with the gRPC server:
 
 ```bash
-Copy code
 python grpc_client.py
 ```
 
