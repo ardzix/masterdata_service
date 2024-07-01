@@ -10,6 +10,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'masterdata.settings')
 import django
 django.setup()
 
+from django.conf import settings
 from proto import masterdata_pb2_grpc
 from service.grpc_services import ProductService
 
