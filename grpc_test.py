@@ -1,10 +1,18 @@
-# grpc_client.py
 import grpc
+import os
+import django
+
+# Configure Django settings
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'masterdata.settings')
+django.setup()
+
+from django.conf import settings
+import uuid
 from google.protobuf import empty_pb2
 from proto import masterdata_pb2, masterdata_pb2_grpc
 
 def print_product(product):
-    print(f"id: {product.id}")
+    print(f"hash: {product.hash}")
     print(f"name: {product.name}")
     print(f"description: {product.description}")
     print(f"category_id: {product.category_id}")
@@ -23,10 +31,10 @@ def print_product(product):
         print(f"  - {attribute.name}: {attribute.value}")
     print("variants:")
     for variant in product.variants:
-        print(f"  - name: {variant.name}, attributes: {variant.attributes}, price: {variant.price}, stock: {variant.stock}, sku: {variant.sku}, image_url: {variant.image_url}")
+        print(f"  - name: {variant.name}, attributes: {variant.attributes}, price: {variant.price}, stock: {variant.stock}, sku: {variant.sku}, image_url: {variant.image_url}, hash: {variant.hash}")
 
 def run():
-    with grpc.insecure_channel('localhost:50051') as channel:
+    with grpc.insecure_channel(f'{settings.MASTERDATA_SERVICE_HOST}:{settings.MASTERDATA_SERVICE_PORT}') as channel:
         stub = masterdata_pb2_grpc.MasterDataServiceStub(channel)
 
         # Create a new product
@@ -41,6 +49,7 @@ def run():
             weight=0.5,
             dimensions="10x10x10",
             is_active=True,
+            hash=str(uuid.uuid4()),
             images=[
                 masterdata_pb2.ProductImage(
                     image_url="http://example.com/image1.jpg",
@@ -70,7 +79,8 @@ def run():
                     price=120.0,
                     stock=5,
                     sku="VARIANT1SKU",
-                    image_url="http://example.com/variant1.jpg"
+                    image_url="http://example.com/variant1.jpg",
+                    hash=str(uuid.uuid4())
                 ),
                 masterdata_pb2.ProductVariant(
                     name="Variant 2",
@@ -78,7 +88,8 @@ def run():
                     price=130.0,
                     stock=3,
                     sku="VARIANT2SKU",
-                    image_url="http://example.com/variant2.jpg"
+                    image_url="http://example.com/variant2.jpg",
+                    hash=str(uuid.uuid4())
                 )
             ]
         )
@@ -87,7 +98,7 @@ def run():
         print_product(create_response)
 
         # Get the product
-        get_request = masterdata_pb2.GetProductRequest(id=create_response.id)
+        get_request = masterdata_pb2.GetProductRequest(hash=create_response.hash)
         get_response = stub.GetProduct(get_request)
         print("\nRetrieved Product:")
         print_product(get_response)
@@ -101,7 +112,7 @@ def run():
 
         # Update the product
         update_request = masterdata_pb2.UpdateProductRequest(
-            id=create_response.id,
+            hash=create_response.hash,
             name="Updated Test Product",
             description="An updated product for testing",
             category_id=1,
@@ -141,7 +152,8 @@ def run():
                     price=140.0,
                     stock=8,
                     sku="UPDATEDVARIANT1SKU",
-                    image_url="http://example.com/updated_variant1.jpg"
+                    image_url="http://example.com/updated_variant1.jpg",
+                    hash=str(uuid.uuid4())
                 ),
                 masterdata_pb2.ProductVariant(
                     name="Updated Variant 2",
@@ -149,7 +161,8 @@ def run():
                     price=160.0,
                     stock=6,
                     sku="UPDATEDVARIANT2SKU",
-                    image_url="http://example.com/updated_variant2.jpg"
+                    image_url="http://example.com/updated_variant2.jpg",
+                    hash=str(uuid.uuid4())
                 )
             ]
         )
@@ -158,7 +171,7 @@ def run():
         print_product(update_response)
 
         # Delete the product
-        delete_request = masterdata_pb2.DeleteProductRequest(id=create_response.id)
+        delete_request = masterdata_pb2.DeleteProductRequest(hash=create_response.hash)
         stub.DeleteProduct(delete_request)
         print("\nDeleted Product")
 

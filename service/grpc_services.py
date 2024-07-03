@@ -19,6 +19,7 @@ class ProductService(masterdata_pb2_grpc.MasterDataServiceServicer):
             "weight": request.weight,
             "dimensions": request.dimensions,
             "is_active": request.is_active,
+            "hash": request.hash if request.hash else None,
         }
 
     def _get_product_response(self, product):
@@ -49,13 +50,14 @@ class ProductService(masterdata_pb2_grpc.MasterDataServiceServicer):
                 price=variant.price,
                 stock=variant.stock,
                 sku=variant.sku,
-                image_url=variant.image.url if variant.image else ""
+                image_url=variant.image.url if variant.image else "",
+                hash=str(variant.hash)
             )
             for variant in variants
         ]
 
         return masterdata_pb2.ProductResponse(
-            id=product.id,
+            hash=str(product.hash),
             name=product.name,
             description=product.description,
             category_id=product.category.id if product.category else 0,
@@ -73,7 +75,7 @@ class ProductService(masterdata_pb2_grpc.MasterDataServiceServicer):
 
     def GetProduct(self, request, context):
         try:
-            product = Product.objects.get(id=request.id)
+            product = Product.objects.get(hash=request.hash)
             return self._get_product_response(product)
         except ObjectDoesNotExist:
             context.abort(grpc.StatusCode.NOT_FOUND, "Product not found")
@@ -110,7 +112,8 @@ class ProductService(masterdata_pb2_grpc.MasterDataServiceServicer):
                     price=variant.price,
                     stock=variant.stock,
                     sku=variant.sku,
-                    image=variant.image_url
+                    image=variant.image_url,
+                    hash=variant.hash if variant.hash else uuid.uuid4()
                 )
             
             return self._get_product_response(product)
@@ -119,7 +122,7 @@ class ProductService(masterdata_pb2_grpc.MasterDataServiceServicer):
 
     def UpdateProduct(self, request, context):
         try:
-            product = Product.objects.get(id=request.id)
+            product = Product.objects.get(hash=request.hash)
             data = self._get_request_data(request)
             serializer = ProductSerializer(product, data=data, partial=True)
             if serializer.is_valid():
@@ -156,7 +159,8 @@ class ProductService(masterdata_pb2_grpc.MasterDataServiceServicer):
                         price=variant.price,
                         stock=variant.stock,
                         sku=variant.sku,
-                        image=variant.image_url
+                        image=variant.image_url,
+                        hash=variant.hash if variant.hash else uuid.uuid4()
                     )
                 
                 return self._get_product_response(product)
@@ -167,7 +171,7 @@ class ProductService(masterdata_pb2_grpc.MasterDataServiceServicer):
 
     def DeleteProduct(self, request, context):
         try:
-            product = Product.objects.get(id=request.id)
+            product = Product.objects.get(hash=request.hash)
             product.delete()
             return empty_pb2.Empty()
         except ObjectDoesNotExist:

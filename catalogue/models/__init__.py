@@ -1,6 +1,4 @@
-from django.db import models
-
-# Create your models here.
+import uuid
 from django.db import models
 
 class Category(models.Model):
@@ -31,6 +29,7 @@ class Product(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    hash = models.UUIDField(default=uuid.uuid4, editable=True, unique=True)
 
     def __str__(self):
         return self.name
@@ -45,6 +44,7 @@ class ProductVariant(models.Model):
     image = models.ImageField(upload_to='product_variants/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    hash = models.UUIDField(default=uuid.uuid4, editable=True, unique=True)
 
     def __str__(self):
         return f"{self.product.name} - {self.name}"

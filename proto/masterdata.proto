@@ -11,7 +11,7 @@ service MasterDataService {
 }
 
 message GetProductRequest {
-    int32 id = 1;
+    string hash = 1;
 }
 
 message CreateProductRequest {
@@ -25,13 +25,14 @@ message CreateProductRequest {
     double weight = 8;
     string dimensions = 9;
     bool is_active = 10;
-    repeated ProductImage images = 11;
-    repeated ProductAttribute attributes = 12;
-    repeated ProductVariant variants = 13;
+    string hash = 11;
+    repeated ProductImage images = 12;
+    repeated ProductAttribute attributes = 13;
+    repeated ProductVariant variants = 14;
 }
 
 message UpdateProductRequest {
-    int32 id = 1;
+    string hash = 1;
     string name = 2;
     string description = 3;
     int32 category_id = 4;
@@ -48,7 +49,7 @@ message UpdateProductRequest {
 }
 
 message DeleteProductRequest {
-    int32 id = 1;
+    string hash = 1;
 }
 
 message ProductImage {
@@ -69,10 +70,11 @@ message ProductVariant {
     int32 stock = 4;
     string sku = 5;
     string image_url = 6;
+    string hash = 7;
 }
 
 message ProductResponse {
-    int32 id = 1;
+    string hash = 1;
     string name = 2;
     string description = 3;
     int32 category_id = 4;
