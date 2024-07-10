@@ -1,9 +1,13 @@
 asgiref==3.8.1
+certifi==2024.7.4
 Django==5.0.6
 djangogrpcframework==0.2.1
 djangorestframework==3.15.2
 grpcio==1.64.1
 grpcio-tools==1.64.1
+multidict==6.0.5
 pillow==10.3.0
 protobuf==5.27.1
+pulsar-client==3.5.0
+python-dotenv==1.0.1
 sqlparse==0.5.0
