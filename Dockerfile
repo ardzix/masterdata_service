@@ -18,7 +18,7 @@ ENV DJANGO_SETTINGS_MODULE=masterdata.settings
 ENV PYTHONUNBUFFERED 1
 
 # Collect static files
-RUN python manage.py collectstatic --noinput
+# RUN python manage.py collectstatic --noinput
 
 # Expose port 8000 and 50051
 EXPOSE 8000 50051
