@@ -1,6 +1,6 @@
 # admin.py
 from django.contrib import admin
-from catalogue.models import Category, Brand, Product, ProductVariant, ProductImage, ProductAttribute
+from catalogue.models import Category, Product, ProductVariant, ProductImage, ProductAttribute
 
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
@@ -24,4 +24,3 @@ class ProductVariantAdmin(admin.ModelAdmin):
     list_display = ('name', 'product', 'price', 'stock', 'hash')
 
 admin.site.register(Category)
-admin.site.register(Brand)

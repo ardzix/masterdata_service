@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from google.protobuf import empty_pb2
 from catalogue.models import Product, ProductImage, ProductVariant, ProductAttribute
 from catalogue.serializers import ProductSerializer
-from proto import masterdata_pb2, masterdata_pb2_grpc
+from . import masterdata_pb2, masterdata_pb2_grpc
 
 class ProductService(masterdata_pb2_grpc.MasterDataServiceServicer):
     def _get_request_data(self, request):

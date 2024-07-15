@@ -9,7 +9,7 @@ django.setup()
 from django.conf import settings
 import uuid
 from google.protobuf import empty_pb2
-from proto import masterdata_pb2, masterdata_pb2_grpc
+from catalogue.grpc import masterdata_pb2, masterdata_pb2_grpc
 
 def print_product(product):
     print(f"hash: {product.hash}")

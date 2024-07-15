@@ -1,5 +1,7 @@
 import uuid
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+from channel.models import Brand
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -9,12 +11,9 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-class Brand(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return self.name
+    class Meta:
+        verbose_name = _("Category")
+        verbose_name_plural = _("Categories")
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
@@ -34,6 +33,10 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = _("Product")
+        verbose_name_plural = _("Products")
+
 class ProductVariant(models.Model):
     product = models.ForeignKey(Product, related_name='variants', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
@@ -49,6 +52,10 @@ class ProductVariant(models.Model):
     def __str__(self):
         return f"{self.product.name} - {self.name}"
 
+    class Meta:
+        verbose_name = _("Product Variant")
+        verbose_name_plural = _("Product Variants")
+
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='product_images/')
@@ -58,6 +65,10 @@ class ProductImage(models.Model):
     def __str__(self):
         return f"Image for {self.product.name}"
 
+    class Meta:
+        verbose_name = _("Product Image")
+        verbose_name_plural = _("Product Images")
+
 class ProductAttribute(models.Model):
     product = models.ForeignKey(Product, related_name='product_attributes', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
@@ -65,3 +76,7 @@ class ProductAttribute(models.Model):
 
     def __str__(self):
         return f"{self.name}: {self.value} for {self.product.name}"
+
+    class Meta:
+        verbose_name = _("Product Attribute")
+        verbose_name_plural = _("Product Attributes")

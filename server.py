@@ -11,8 +11,8 @@ import django
 django.setup()
 
 from django.conf import settings
-from proto import masterdata_pb2_grpc
-from service.grpc_services import ProductService
+from catalogue.grpc import masterdata_pb2_grpc
+from catalogue.grpc.grpc_services import ProductService
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
