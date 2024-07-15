@@ -1,0 +1,1 @@
+python -m grpc_tools.protoc -I./channel/grpc --python_out=channel/grpc/ --grpc_python_out=channel/grpc/ ./channel/grpc/channel.proto

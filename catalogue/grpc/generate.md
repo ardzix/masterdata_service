@@ -1,1 +1,1 @@
-python -m grpc_tools.protoc -I./catalogue/grpc --python_out=catalogue/grpc/ --grpc_python_out=catalogue/grpc/ ./catalogue/grpc/masterdata.proto
+python -m grpc_tools.protoc -I./catalogue/grpc --python_out=catalogue/grpc/ --grpc_python_out=catalogue/grpc/ ./catalogue/grpc/catalogue.proto

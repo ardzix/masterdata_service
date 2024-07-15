@@ -11,15 +11,24 @@ import django
 django.setup()
 
 from django.conf import settings
-from catalogue.grpc import masterdata_pb2_grpc
+from catalogue.grpc import catalogue_pb2_grpc
 from catalogue.grpc.grpc_services import ProductService
+from channel.grpc import channel_pb2_grpc
+from channel.grpc.grpc_services import ChannelService
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    masterdata_pb2_grpc.add_MasterDataServiceServicer_to_server(ProductService(), server)
-    server.add_insecure_port('[::]:50051')
+
+    # Add both PointService and PromoService to the same server instance
+    catalogue_pb2_grpc.add_CatalogueServiceServicer_to_server(ProductService(), server)
+    channel_pb2_grpc.add_ChannelServiceServicer_to_server(ChannelService(), server)
+
+    # Listen on two different ports
+    server.add_insecure_port(f'[::]:{settings.MD_CATALOGUE_SERVICE_PORT}')
+    server.add_insecure_port(f'[::]:{settings.MD_CHANNEL_SERVICE_PORT}')
+
     server.start()
-    print("gRPC server running on port 50051...")
+    print(f'gRPC servers running on ports {settings.MD_CATALOGUE_SERVICE_PORT} and {settings.MD_CHANNEL_SERVICE_PORT}...')
     try:
         while True:
             time.sleep(86400)

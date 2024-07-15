@@ -1,0 +1,153 @@
+syntax = "proto3";
+
+package channel;
+
+service ChannelService {
+    // CRUD operations for Brand
+    rpc GetBrand(GetBrandRequest) returns (BrandResponse);
+    rpc CreateBrand(CreateBrandRequest) returns (BrandResponse);
+    rpc UpdateBrand(UpdateBrandRequest) returns (BrandResponse);
+    rpc DeleteBrand(DeleteBrandRequest) returns (Empty);
+    rpc ListBrands(Empty) returns (ListBrandsResponse);
+
+    // CRUD operations for Channel
+    rpc GetChannel(GetChannelRequest) returns (ChannelResponse);
+    rpc CreateChannel(CreateChannelRequest) returns (ChannelResponse);
+    rpc UpdateChannel(UpdateChannelRequest) returns (ChannelResponse);
+    rpc DeleteChannel(DeleteChannelRequest) returns (Empty);
+    rpc ListChannels(Empty) returns (ListChannelsResponse);
+
+    // CRUD operations for Event
+    rpc GetEvent(GetEventRequest) returns (EventResponse);
+    rpc CreateEvent(CreateEventRequest) returns (EventResponse);
+    rpc UpdateEvent(UpdateEventRequest) returns (EventResponse);
+    rpc DeleteEvent(DeleteEventRequest) returns (Empty);
+    rpc ListEvents(Empty) returns (ListEventsResponse);
+
+    // Add, remove, and set brands for an event
+    rpc AddBrandToEvent(AddBrandToEventRequest) returns (EventResponse);
+    rpc RemoveBrandFromEvent(RemoveBrandFromEventRequest) returns (EventResponse);
+    rpc SetBrandsForEvent(SetBrandsForEventRequest) returns (EventResponse);
+}
+
+message GetBrandRequest {
+    string hash = 1;
+}
+
+message CreateBrandRequest {
+    string name = 1;
+    string description = 2;
+    bool is_active = 3;
+}
+
+message UpdateBrandRequest {
+    string hash = 1;
+    string name = 2;
+    string description = 3;
+    bool is_active = 4;
+}
+
+message DeleteBrandRequest {
+    string hash = 1;
+}
+
+message BrandResponse {
+    string hash = 1;
+    string name = 2;
+    string description = 3;
+    bool is_active = 4;
+}
+
+message ListBrandsResponse {
+    repeated BrandResponse brands = 1;
+}
+
+message GetChannelRequest {
+    string hash = 1;
+}
+
+message CreateChannelRequest {
+    string name = 1;
+    string description = 2;
+    string brand_hash = 3;
+}
+
+message UpdateChannelRequest {
+    string hash = 1;
+    string name = 2;
+    string description = 3;
+    string brand_hash = 4;
+}
+
+message DeleteChannelRequest {
+    string hash = 1;
+}
+
+message ChannelResponse {
+    string hash = 1;
+    string name = 2;
+    string description = 3;
+    string brand_hash = 4;
+}
+
+message ListChannelsResponse {
+    repeated ChannelResponse channels = 1;
+}
+
+message GetEventRequest {
+    string hash = 1;
+}
+
+message CreateEventRequest {
+    string name = 1;
+    string description = 2;
+    string start_date = 3;
+    string end_date = 4;
+    string channel_hash = 5;
+    repeated string brand_hashes = 6;
+}
+
+message UpdateEventRequest {
+    string hash = 1;
+    string name = 2;
+    string description = 3;
+    string start_date = 4;
+    string end_date = 5;
+    string channel_hash = 6;
+    repeated string brand_hashes = 7;
+}
+
+message DeleteEventRequest {
+    string hash = 1;
+}
+
+message EventResponse {
+    string hash = 1;
+    string name = 2;
+    string description = 3;
+    string start_date = 4;
+    string end_date = 5;
+    string channel_hash = 6;
+    repeated string brand_hashes = 7;
+}
+
+message ListEventsResponse {
+    repeated EventResponse events = 1;
+}
+
+message AddBrandToEventRequest {
+    string event_hash = 1;
+    string brand_hash = 2;
+}
+
+message RemoveBrandFromEventRequest {
+    string event_hash = 1;
+    string brand_hash = 2;
+}
+
+message SetBrandsForEventRequest {
+    string event_hash = 1;
+    repeated string brand_hashes = 2;
+}
+
+message Empty {}

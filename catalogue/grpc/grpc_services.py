@@ -1,12 +1,13 @@
 # grpc_services.py
 import grpc
+import uuid
 from django.core.exceptions import ObjectDoesNotExist
 from google.protobuf import empty_pb2
 from catalogue.models import Product, ProductImage, ProductVariant, ProductAttribute
 from catalogue.serializers import ProductSerializer
-from . import masterdata_pb2, masterdata_pb2_grpc
+from . import catalogue_pb2, catalogue_pb2_grpc
 
-class ProductService(masterdata_pb2_grpc.MasterDataServiceServicer):
+class ProductService(catalogue_pb2_grpc.CatalogueServiceServicer):
     def _get_request_data(self, request):
         return {
             "name": request.name,
@@ -25,7 +26,7 @@ class ProductService(masterdata_pb2_grpc.MasterDataServiceServicer):
     def _get_product_response(self, product):
         images = ProductImage.objects.filter(product=product)
         image_list = [
-            masterdata_pb2.ProductImage(
+            catalogue_pb2.ProductImage(
                 image_url=image.image.url,
                 alt_text=image.alt_text,
                 is_primary=image.is_primary
@@ -35,7 +36,7 @@ class ProductService(masterdata_pb2_grpc.MasterDataServiceServicer):
 
         attributes = ProductAttribute.objects.filter(product=product)
         attribute_list = [
-            masterdata_pb2.ProductAttribute(
+            catalogue_pb2.ProductAttribute(
                 name=attribute.name,
                 value=attribute.value
             )
@@ -44,7 +45,7 @@ class ProductService(masterdata_pb2_grpc.MasterDataServiceServicer):
 
         variants = ProductVariant.objects.filter(product=product)
         variant_list = [
-            masterdata_pb2.ProductVariant(
+            catalogue_pb2.ProductVariant(
                 name=variant.name,
                 attributes=dict(variant.attributes),
                 price=variant.price,
@@ -56,7 +57,7 @@ class ProductService(masterdata_pb2_grpc.MasterDataServiceServicer):
             for variant in variants
         ]
 
-        return masterdata_pb2.ProductResponse(
+        return catalogue_pb2.ProductResponse(
             hash=str(product.hash),
             name=product.name,
             description=product.description,
@@ -179,7 +180,7 @@ class ProductService(masterdata_pb2_grpc.MasterDataServiceServicer):
 
     def ListProducts(self, request, context):
         products = Product.objects.all()
-        response = masterdata_pb2.ListProductsResponse()
+        response = catalogue_pb2.ListProductsResponse()
         for product in products:
             response.products.append(self._get_product_response(product))
         return response

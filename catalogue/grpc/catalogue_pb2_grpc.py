@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-from . import masterdata_pb2 as masterdata__pb2
+from . import catalogue_pb2 as catalogue__pb2
 
 GRPC_GENERATED_VERSION = '1.64.1'
 GRPC_VERSION = grpc.__version__
@@ -20,7 +20,7 @@ except ImportError:
 if _version_not_supported:
     warnings.warn(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in masterdata_pb2_grpc.py depends on'
+        + f' but the generated code in catalogue_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
@@ -30,7 +30,7 @@ if _version_not_supported:
     )
 
 
-class MasterDataServiceStub(object):
+class CatalogueServiceStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -40,33 +40,33 @@ class MasterDataServiceStub(object):
             channel: A grpc.Channel.
         """
         self.GetProduct = channel.unary_unary(
-                '/masterdata.MasterDataService/GetProduct',
-                request_serializer=masterdata__pb2.GetProductRequest.SerializeToString,
-                response_deserializer=masterdata__pb2.ProductResponse.FromString,
+                '/catalogue.CatalogueService/GetProduct',
+                request_serializer=catalogue__pb2.GetProductRequest.SerializeToString,
+                response_deserializer=catalogue__pb2.ProductResponse.FromString,
                 _registered_method=True)
         self.CreateProduct = channel.unary_unary(
-                '/masterdata.MasterDataService/CreateProduct',
-                request_serializer=masterdata__pb2.CreateProductRequest.SerializeToString,
-                response_deserializer=masterdata__pb2.ProductResponse.FromString,
+                '/catalogue.CatalogueService/CreateProduct',
+                request_serializer=catalogue__pb2.CreateProductRequest.SerializeToString,
+                response_deserializer=catalogue__pb2.ProductResponse.FromString,
                 _registered_method=True)
         self.UpdateProduct = channel.unary_unary(
-                '/masterdata.MasterDataService/UpdateProduct',
-                request_serializer=masterdata__pb2.UpdateProductRequest.SerializeToString,
-                response_deserializer=masterdata__pb2.ProductResponse.FromString,
+                '/catalogue.CatalogueService/UpdateProduct',
+                request_serializer=catalogue__pb2.UpdateProductRequest.SerializeToString,
+                response_deserializer=catalogue__pb2.ProductResponse.FromString,
                 _registered_method=True)
         self.DeleteProduct = channel.unary_unary(
-                '/masterdata.MasterDataService/DeleteProduct',
-                request_serializer=masterdata__pb2.DeleteProductRequest.SerializeToString,
-                response_deserializer=masterdata__pb2.Empty.FromString,
+                '/catalogue.CatalogueService/DeleteProduct',
+                request_serializer=catalogue__pb2.DeleteProductRequest.SerializeToString,
+                response_deserializer=catalogue__pb2.Empty.FromString,
                 _registered_method=True)
         self.ListProducts = channel.unary_unary(
-                '/masterdata.MasterDataService/ListProducts',
-                request_serializer=masterdata__pb2.Empty.SerializeToString,
-                response_deserializer=masterdata__pb2.ListProductsResponse.FromString,
+                '/catalogue.CatalogueService/ListProducts',
+                request_serializer=catalogue__pb2.Empty.SerializeToString,
+                response_deserializer=catalogue__pb2.ListProductsResponse.FromString,
                 _registered_method=True)
 
 
-class MasterDataServiceServicer(object):
+class CatalogueServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def GetProduct(self, request, context):
@@ -100,42 +100,42 @@ class MasterDataServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
 
-def add_MasterDataServiceServicer_to_server(servicer, server):
+def add_CatalogueServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'GetProduct': grpc.unary_unary_rpc_method_handler(
                     servicer.GetProduct,
-                    request_deserializer=masterdata__pb2.GetProductRequest.FromString,
-                    response_serializer=masterdata__pb2.ProductResponse.SerializeToString,
+                    request_deserializer=catalogue__pb2.GetProductRequest.FromString,
+                    response_serializer=catalogue__pb2.ProductResponse.SerializeToString,
             ),
             'CreateProduct': grpc.unary_unary_rpc_method_handler(
                     servicer.CreateProduct,
-                    request_deserializer=masterdata__pb2.CreateProductRequest.FromString,
-                    response_serializer=masterdata__pb2.ProductResponse.SerializeToString,
+                    request_deserializer=catalogue__pb2.CreateProductRequest.FromString,
+                    response_serializer=catalogue__pb2.ProductResponse.SerializeToString,
             ),
             'UpdateProduct': grpc.unary_unary_rpc_method_handler(
                     servicer.UpdateProduct,
-                    request_deserializer=masterdata__pb2.UpdateProductRequest.FromString,
-                    response_serializer=masterdata__pb2.ProductResponse.SerializeToString,
+                    request_deserializer=catalogue__pb2.UpdateProductRequest.FromString,
+                    response_serializer=catalogue__pb2.ProductResponse.SerializeToString,
             ),
             'DeleteProduct': grpc.unary_unary_rpc_method_handler(
                     servicer.DeleteProduct,
-                    request_deserializer=masterdata__pb2.DeleteProductRequest.FromString,
-                    response_serializer=masterdata__pb2.Empty.SerializeToString,
+                    request_deserializer=catalogue__pb2.DeleteProductRequest.FromString,
+                    response_serializer=catalogue__pb2.Empty.SerializeToString,
             ),
             'ListProducts': grpc.unary_unary_rpc_method_handler(
                     servicer.ListProducts,
-                    request_deserializer=masterdata__pb2.Empty.FromString,
-                    response_serializer=masterdata__pb2.ListProductsResponse.SerializeToString,
+                    request_deserializer=catalogue__pb2.Empty.FromString,
+                    response_serializer=catalogue__pb2.ListProductsResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'masterdata.MasterDataService', rpc_method_handlers)
+            'catalogue.CatalogueService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('masterdata.MasterDataService', rpc_method_handlers)
+    server.add_registered_method_handlers('catalogue.CatalogueService', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
-class MasterDataService(object):
+class CatalogueService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -152,9 +152,9 @@ class MasterDataService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/masterdata.MasterDataService/GetProduct',
-            masterdata__pb2.GetProductRequest.SerializeToString,
-            masterdata__pb2.ProductResponse.FromString,
+            '/catalogue.CatalogueService/GetProduct',
+            catalogue__pb2.GetProductRequest.SerializeToString,
+            catalogue__pb2.ProductResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -179,9 +179,9 @@ class MasterDataService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/masterdata.MasterDataService/CreateProduct',
-            masterdata__pb2.CreateProductRequest.SerializeToString,
-            masterdata__pb2.ProductResponse.FromString,
+            '/catalogue.CatalogueService/CreateProduct',
+            catalogue__pb2.CreateProductRequest.SerializeToString,
+            catalogue__pb2.ProductResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -206,9 +206,9 @@ class MasterDataService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/masterdata.MasterDataService/UpdateProduct',
-            masterdata__pb2.UpdateProductRequest.SerializeToString,
-            masterdata__pb2.ProductResponse.FromString,
+            '/catalogue.CatalogueService/UpdateProduct',
+            catalogue__pb2.UpdateProductRequest.SerializeToString,
+            catalogue__pb2.ProductResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -233,9 +233,9 @@ class MasterDataService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/masterdata.MasterDataService/DeleteProduct',
-            masterdata__pb2.DeleteProductRequest.SerializeToString,
-            masterdata__pb2.Empty.FromString,
+            '/catalogue.CatalogueService/DeleteProduct',
+            catalogue__pb2.DeleteProductRequest.SerializeToString,
+            catalogue__pb2.Empty.FromString,
             options,
             channel_credentials,
             insecure,
@@ -260,9 +260,9 @@ class MasterDataService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/masterdata.MasterDataService/ListProducts',
-            masterdata__pb2.Empty.SerializeToString,
-            masterdata__pb2.ListProductsResponse.FromString,
+            '/catalogue.CatalogueService/ListProducts',
+            catalogue__pb2.Empty.SerializeToString,
+            catalogue__pb2.ListProductsResponse.FromString,
             options,
             channel_credentials,
             insecure,

@@ -9,7 +9,7 @@ django.setup()
 from django.conf import settings
 import uuid
 from google.protobuf import empty_pb2
-from catalogue.grpc import masterdata_pb2, masterdata_pb2_grpc
+from catalogue.grpc import catalogue_pb2, catalogue_pb2_grpc
 
 def print_product(product):
     print(f"hash: {product.hash}")
@@ -34,11 +34,11 @@ def print_product(product):
         print(f"  - name: {variant.name}, attributes: {variant.attributes}, price: {variant.price}, stock: {variant.stock}, sku: {variant.sku}, image_url: {variant.image_url}, hash: {variant.hash}")
 
 def run():
-    with grpc.insecure_channel(f'{settings.MASTERDATA_SERVICE_HOST}:{settings.MASTERDATA_SERVICE_PORT}') as channel:
-        stub = masterdata_pb2_grpc.MasterDataServiceStub(channel)
+    with grpc.insecure_channel(f'{settings.MD_CATALOGUE_SERVICE_HOST}:{settings.MD_CATALOGUE_SERVICE_PORT}') as channel:
+        stub = catalogue_pb2_grpc.CatalogueServiceStub(channel)
 
         # Create a new product
-        create_request = masterdata_pb2.CreateProductRequest(
+        create_request = catalogue_pb2.CreateProductRequest(
             name="Test Product",
             description="A product for testing",
             category_id=1,
@@ -51,29 +51,29 @@ def run():
             is_active=True,
             hash=str(uuid.uuid4()),
             images=[
-                masterdata_pb2.ProductImage(
+                catalogue_pb2.ProductImage(
                     image_url="http://example.com/image1.jpg",
                     alt_text="Image 1",
                     is_primary=True
                 ),
-                masterdata_pb2.ProductImage(
+                catalogue_pb2.ProductImage(
                     image_url="http://example.com/image2.jpg",
                     alt_text="Image 2",
                     is_primary=False
                 )
             ],
             attributes=[
-                masterdata_pb2.ProductAttribute(
+                catalogue_pb2.ProductAttribute(
                     name="Color",
                     value="Red"
                 ),
-                masterdata_pb2.ProductAttribute(
+                catalogue_pb2.ProductAttribute(
                     name="Size",
                     value="M"
                 )
             ],
             variants=[
-                masterdata_pb2.ProductVariant(
+                catalogue_pb2.ProductVariant(
                     name="Variant 1",
                     attributes={"Color": "Red", "Size": "M"},
                     price=120.0,
@@ -82,7 +82,7 @@ def run():
                     image_url="http://example.com/variant1.jpg",
                     hash=str(uuid.uuid4())
                 ),
-                masterdata_pb2.ProductVariant(
+                catalogue_pb2.ProductVariant(
                     name="Variant 2",
                     attributes={"Color": "Blue", "Size": "L"},
                     price=130.0,
@@ -98,7 +98,7 @@ def run():
         print_product(create_response)
 
         # Get the product
-        get_request = masterdata_pb2.GetProductRequest(hash=create_response.hash)
+        get_request = catalogue_pb2.GetProductRequest(hash=create_response.hash)
         get_response = stub.GetProduct(get_request)
         print("\nRetrieved Product:")
         print_product(get_response)
@@ -111,7 +111,7 @@ def run():
             print("\n")
 
         # Update the product
-        update_request = masterdata_pb2.UpdateProductRequest(
+        update_request = catalogue_pb2.UpdateProductRequest(
             hash=create_response.hash,
             name="Updated Test Product",
             description="An updated product for testing",
@@ -124,29 +124,29 @@ def run():
             dimensions="10x10x10",
             is_active=True,
             images=[
-                masterdata_pb2.ProductImage(
+                catalogue_pb2.ProductImage(
                     image_url="http://example.com/image1_updated.jpg",
                     alt_text="Updated Image 1",
                     is_primary=True
                 ),
-                masterdata_pb2.ProductImage(
+                catalogue_pb2.ProductImage(
                     image_url="http://example.com/image2_updated.jpg",
                     alt_text="Updated Image 2",
                     is_primary=False
                 )
             ],
             attributes=[
-                masterdata_pb2.ProductAttribute(
+                catalogue_pb2.ProductAttribute(
                     name="Color",
                     value="Blue"
                 ),
-                masterdata_pb2.ProductAttribute(
+                catalogue_pb2.ProductAttribute(
                     name="Size",
                     value="L"
                 )
             ],
             variants=[
-                masterdata_pb2.ProductVariant(
+                catalogue_pb2.ProductVariant(
                     name="Updated Variant 1",
                     attributes={"Color": "Blue", "Size": "L"},
                     price=140.0,
@@ -155,7 +155,7 @@ def run():
                     image_url="http://example.com/updated_variant1.jpg",
                     hash=str(uuid.uuid4())
                 ),
-                masterdata_pb2.ProductVariant(
+                catalogue_pb2.ProductVariant(
                     name="Updated Variant 2",
                     attributes={"Color": "Green", "Size": "XL"},
                     price=160.0,
@@ -171,7 +171,7 @@ def run():
         print_product(update_response)
 
         # Delete the product
-        delete_request = masterdata_pb2.DeleteProductRequest(hash=create_response.hash)
+        delete_request = catalogue_pb2.DeleteProductRequest(hash=create_response.hash)
         stub.DeleteProduct(delete_request)
         print("\nDeleted Product")
 
