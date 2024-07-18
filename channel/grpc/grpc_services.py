@@ -12,6 +12,7 @@ class ChannelService(channel_pb2_grpc.ChannelServiceServicer):
 
     # Brand related methods
     def GetBrand(self, request, context):
+        logger.info(f"Received GetBrand request with req: {request}")
         try:
             brand = Brand.objects.get(hash=request.hash)
             return self._get_brand_response(brand)
@@ -19,6 +20,7 @@ class ChannelService(channel_pb2_grpc.ChannelServiceServicer):
             context.abort(grpc.StatusCode.NOT_FOUND, "Brand not found")
 
     def CreateBrand(self, request, context):
+        logger.info(f"Received CreateBrand request with req: {request}")
         data = {
             "name": request.name,
             "description": request.description,
@@ -33,6 +35,7 @@ class ChannelService(channel_pb2_grpc.ChannelServiceServicer):
             context.abort(grpc.StatusCode.INVALID_ARGUMENT, str(serializer.errors))
 
     def UpdateBrand(self, request, context):
+        logger.info(f"Received UpdateBrand request with req: {request}")
         try:
             brand = Brand.objects.get(hash=request.hash)
             data = {
@@ -50,6 +53,7 @@ class ChannelService(channel_pb2_grpc.ChannelServiceServicer):
             context.abort(grpc.StatusCode.NOT_FOUND, "Brand not found")
 
     def DeleteBrand(self, request, context):
+        logger.info(f"Received DeleteBrand request with req: {request}")
         try:
             brand = Brand.objects.get(hash=request.hash)
             brand.delete()
@@ -75,6 +79,7 @@ class ChannelService(channel_pb2_grpc.ChannelServiceServicer):
 
     # Channel related methods
     def GetChannel(self, request, context):
+        logger.info(f"Received GetChannel request with req: {request}")
         try:
             channel = Channel.objects.get(hash=request.hash)
             return self._get_channel_response(channel)
@@ -82,6 +87,7 @@ class ChannelService(channel_pb2_grpc.ChannelServiceServicer):
             context.abort(grpc.StatusCode.NOT_FOUND, "Channel not found")
 
     def CreateChannel(self, request, context):
+        logger.info(f"Received CreateChannel request with req: {request}")
         data = {
             "name": request.name,
             "description": request.description,
@@ -96,6 +102,7 @@ class ChannelService(channel_pb2_grpc.ChannelServiceServicer):
             context.abort(grpc.StatusCode.INVALID_ARGUMENT, str(serializer.errors))
 
     def UpdateChannel(self, request, context):
+        logger.info(f"Received UpdateChannel request with req: {request}")
         try:
             channel = Channel.objects.get(hash=request.hash)
             data = {
@@ -113,6 +120,7 @@ class ChannelService(channel_pb2_grpc.ChannelServiceServicer):
             context.abort(grpc.StatusCode.NOT_FOUND, "Channel not found")
 
     def DeleteChannel(self, request, context):
+        logger.info(f"Received DeleteChannel request with req: {request}")
         try:
             channel = Channel.objects.get(hash=request.hash)
             channel.delete()
@@ -121,6 +129,7 @@ class ChannelService(channel_pb2_grpc.ChannelServiceServicer):
             context.abort(grpc.StatusCode.NOT_FOUND, "Channel not found")
 
     def ListChannels(self, request, context):
+        logger.info(f"Received ListChannels request with req: {request}")
         channels = Channel.objects.all()
         response = channel_pb2.ListChannelsResponse()
         for channel in channels:
@@ -137,6 +146,7 @@ class ChannelService(channel_pb2_grpc.ChannelServiceServicer):
 
     # Event related methods
     def GetEvent(self, request, context):
+        logger.info(f"Received GetEvent request with req: {request}")
         try:
             event = Event.objects.get(hash=request.hash)
             return self._get_event_response(event)
@@ -144,6 +154,7 @@ class ChannelService(channel_pb2_grpc.ChannelServiceServicer):
             context.abort(grpc.StatusCode.NOT_FOUND, "Event not found")
 
     def CreateEvent(self, request, context):
+        logger.info(f"Received CreateEvent request with req: {request}")
         data = {
             "name": request.name,
             "description": request.description,
@@ -161,6 +172,7 @@ class ChannelService(channel_pb2_grpc.ChannelServiceServicer):
             context.abort(grpc.StatusCode.INVALID_ARGUMENT, str(serializer.errors))
 
     def UpdateEvent(self, request, context):
+        logger.info(f"Received UpdateEvent request with req: {request}")
         try:
             event = Event.objects.get(hash=request.hash)
             data = {
@@ -181,6 +193,7 @@ class ChannelService(channel_pb2_grpc.ChannelServiceServicer):
             context.abort(grpc.StatusCode.NOT_FOUND, "Event not found")
 
     def DeleteEvent(self, request, context):
+        logger.info(f"Received DeleteEvent request with req: {request}")
         try:
             event = Event.objects.get(hash=request.hash)
             event.delete()
@@ -189,6 +202,7 @@ class ChannelService(channel_pb2_grpc.ChannelServiceServicer):
             context.abort(grpc.StatusCode.NOT_FOUND, "Event not found")
 
     def ListEvents(self, request, context):
+        logger.info(f"Received ListEvents request with req: {request}")
         events = Event.objects.all()
         response = channel_pb2.ListEventsResponse()
         for event in events:
@@ -208,6 +222,7 @@ class ChannelService(channel_pb2_grpc.ChannelServiceServicer):
 
     # Brand-Event relationship methods
     def AddBrandToEvent(self, request, context):
+        logger.info(f"Received AddBrandToEvent request with req: {request}")
         try:
             event = Event.objects.get(hash=request.event_hash)
             if request.brand_hash not in event.brand_hashes:
@@ -217,6 +232,7 @@ class ChannelService(channel_pb2_grpc.ChannelServiceServicer):
             context.abort(grpc.StatusCode.NOT_FOUND, "Event/brand not found")
 
     def RemoveBrandFromEvent(self, request, context):
+        logger.info(f"Received RemoveBrandFromEvent request with req: {request}")
         try:
             event = Event.objects.get(hash=request.event_hash)
             if request.brand_hash in event.brand_hashes:
@@ -227,6 +243,7 @@ class ChannelService(channel_pb2_grpc.ChannelServiceServicer):
             context.abort(grpc.StatusCode.NOT_FOUND, "Event not found")
 
     def SetBrandsForEvent(self, request, context):
+        logger.info(f"Received SetBrandsForEvent request with req: {request}")
         try:
             event = Event.objects.get(hash=request.event_hash)
             brands = Brand.objects.filter(hash__in=request.brand_hashes)
