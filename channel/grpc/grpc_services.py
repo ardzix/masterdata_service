@@ -1,6 +1,7 @@
 # channel_services.py
 import grpc
 import uuid
+import logging
 from django.core.exceptions import ObjectDoesNotExist
 from google.protobuf import empty_pb2
 from channel.models import Brand, Channel, Event
@@ -57,6 +58,7 @@ class ChannelService(channel_pb2_grpc.ChannelServiceServicer):
             context.abort(grpc.StatusCode.NOT_FOUND, "Brand not found")
 
     def ListBrands(self, request, context):
+        logger.info(f"Received ListBrands request with req: {request}")
         brands = Brand.objects.all()
         response = channel_pb2.ListBrandsResponse()
         for brand in brands:
