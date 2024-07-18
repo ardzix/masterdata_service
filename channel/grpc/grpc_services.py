@@ -8,6 +8,10 @@ from channel.models import Brand, Channel, Event
 from channel.serializers import BrandSerializer, ChannelSerializer, EventSerializer
 from . import channel_pb2, channel_pb2_grpc
 
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 class ChannelService(channel_pb2_grpc.ChannelServiceServicer):
 
     # Brand related methods
