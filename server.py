@@ -3,6 +3,7 @@ import os
 import grpc
 from concurrent import futures
 import time
+import logging
 
 # Set the Django settings module environment variable
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'masterdata.settings')
@@ -16,6 +17,10 @@ from catalogue.grpc.grpc_services import ProductService
 from channel.grpc import channel_pb2_grpc
 from channel.grpc.grpc_services import ChannelService
 
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
@@ -28,7 +33,7 @@ def serve():
     server.add_insecure_port(f'[::]:{settings.MD_CHANNEL_SERVICE_PORT}')
 
     server.start()
-    print(f'gRPC servers running on ports {settings.MD_CATALOGUE_SERVICE_PORT} and {settings.MD_CHANNEL_SERVICE_PORT}...')
+    logger.info(f'gRPC servers running on ports {settings.MD_CATALOGUE_SERVICE_PORT} and {settings.MD_CHANNEL_SERVICE_PORT}...')
     try:
         while True:
             time.sleep(86400)
