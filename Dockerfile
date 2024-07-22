@@ -24,4 +24,4 @@ ENV PYTHONUNBUFFERED 1
 EXPOSE 8000 50051
 
 # Run the command to start uWSGI
-CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000 & python server.py"]
+CMD ["sh", "-c", "python manage.py migrate && python server.py"]
