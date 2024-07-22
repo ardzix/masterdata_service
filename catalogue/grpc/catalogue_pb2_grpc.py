@@ -64,6 +64,31 @@ class CatalogueServiceStub(object):
                 request_serializer=catalogue__pb2.Empty.SerializeToString,
                 response_deserializer=catalogue__pb2.ListProductsResponse.FromString,
                 _registered_method=True)
+        self.GetCategory = channel.unary_unary(
+                '/catalogue.CatalogueService/GetCategory',
+                request_serializer=catalogue__pb2.GetCategoryRequest.SerializeToString,
+                response_deserializer=catalogue__pb2.CategoryResponse.FromString,
+                _registered_method=True)
+        self.CreateCategory = channel.unary_unary(
+                '/catalogue.CatalogueService/CreateCategory',
+                request_serializer=catalogue__pb2.CreateCategoryRequest.SerializeToString,
+                response_deserializer=catalogue__pb2.CategoryResponse.FromString,
+                _registered_method=True)
+        self.UpdateCategory = channel.unary_unary(
+                '/catalogue.CatalogueService/UpdateCategory',
+                request_serializer=catalogue__pb2.UpdateCategoryRequest.SerializeToString,
+                response_deserializer=catalogue__pb2.CategoryResponse.FromString,
+                _registered_method=True)
+        self.DeleteCategory = channel.unary_unary(
+                '/catalogue.CatalogueService/DeleteCategory',
+                request_serializer=catalogue__pb2.DeleteCategoryRequest.SerializeToString,
+                response_deserializer=catalogue__pb2.Empty.FromString,
+                _registered_method=True)
+        self.ListCategories = channel.unary_unary(
+                '/catalogue.CatalogueService/ListCategories',
+                request_serializer=catalogue__pb2.Empty.SerializeToString,
+                response_deserializer=catalogue__pb2.ListCategoriesResponse.FromString,
+                _registered_method=True)
 
 
 class CatalogueServiceServicer(object):
@@ -99,6 +124,37 @@ class CatalogueServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetCategory(self, request, context):
+        """Category CRUD operations
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def CreateCategory(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def UpdateCategory(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DeleteCategory(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ListCategories(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_CatalogueServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -126,6 +182,31 @@ def add_CatalogueServiceServicer_to_server(servicer, server):
                     servicer.ListProducts,
                     request_deserializer=catalogue__pb2.Empty.FromString,
                     response_serializer=catalogue__pb2.ListProductsResponse.SerializeToString,
+            ),
+            'GetCategory': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetCategory,
+                    request_deserializer=catalogue__pb2.GetCategoryRequest.FromString,
+                    response_serializer=catalogue__pb2.CategoryResponse.SerializeToString,
+            ),
+            'CreateCategory': grpc.unary_unary_rpc_method_handler(
+                    servicer.CreateCategory,
+                    request_deserializer=catalogue__pb2.CreateCategoryRequest.FromString,
+                    response_serializer=catalogue__pb2.CategoryResponse.SerializeToString,
+            ),
+            'UpdateCategory': grpc.unary_unary_rpc_method_handler(
+                    servicer.UpdateCategory,
+                    request_deserializer=catalogue__pb2.UpdateCategoryRequest.FromString,
+                    response_serializer=catalogue__pb2.CategoryResponse.SerializeToString,
+            ),
+            'DeleteCategory': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeleteCategory,
+                    request_deserializer=catalogue__pb2.DeleteCategoryRequest.FromString,
+                    response_serializer=catalogue__pb2.Empty.SerializeToString,
+            ),
+            'ListCategories': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListCategories,
+                    request_deserializer=catalogue__pb2.Empty.FromString,
+                    response_serializer=catalogue__pb2.ListCategoriesResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -263,6 +344,141 @@ class CatalogueService(object):
             '/catalogue.CatalogueService/ListProducts',
             catalogue__pb2.Empty.SerializeToString,
             catalogue__pb2.ListProductsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetCategory(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/catalogue.CatalogueService/GetCategory',
+            catalogue__pb2.GetCategoryRequest.SerializeToString,
+            catalogue__pb2.CategoryResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def CreateCategory(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/catalogue.CatalogueService/CreateCategory',
+            catalogue__pb2.CreateCategoryRequest.SerializeToString,
+            catalogue__pb2.CategoryResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def UpdateCategory(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/catalogue.CatalogueService/UpdateCategory',
+            catalogue__pb2.UpdateCategoryRequest.SerializeToString,
+            catalogue__pb2.CategoryResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def DeleteCategory(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/catalogue.CatalogueService/DeleteCategory',
+            catalogue__pb2.DeleteCategoryRequest.SerializeToString,
+            catalogue__pb2.Empty.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ListCategories(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/catalogue.CatalogueService/ListCategories',
+            catalogue__pb2.Empty.SerializeToString,
+            catalogue__pb2.ListCategoriesResponse.FromString,
             options,
             channel_credentials,
             insecure,

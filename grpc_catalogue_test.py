@@ -33,6 +33,12 @@ def print_product(product):
     for variant in product.variants:
         print(f"  - name: {variant.name}, attributes: {variant.attributes}, price: {variant.price}, stock: {variant.stock}, sku: {variant.sku}, image_url: {variant.image_url}, hash: {variant.hash}")
 
+def print_category(category):
+    print(f"hash: {category.hash}")
+    print(f"name: {category.name}")
+    print(f"description: {category.description}")
+    print(f"parent_hash: {category.parent_hash}")
+
 def run():
     with grpc.insecure_channel(f'{settings.MD_CATALOGUE_SERVICE_HOST}:{settings.MD_CATALOGUE_SERVICE_PORT}') as channel:
         stub = catalogue_pb2_grpc.CatalogueServiceStub(channel)
@@ -174,6 +180,45 @@ def run():
         delete_request = catalogue_pb2.DeleteProductRequest(hash=create_response.hash)
         stub.DeleteProduct(delete_request)
         print("\nDeleted Product")
+
+        # Create a new category
+        create_category_request = catalogue_pb2.CreateCategoryRequest(
+            name="Test Category",
+            description="A test category",
+            parent_hash=""
+        )
+        category_response = stub.CreateCategory(create_category_request)
+        print("Created Category:")
+        print_category(category_response)
+
+        # Get the category
+        get_category_request = catalogue_pb2.GetCategoryRequest(hash=category_response.hash)
+        get_category_response = stub.GetCategory(get_category_request)
+        print("\nRetrieved Category:")
+        print_category(get_category_response)
+
+        # List all categories
+        list_categories_response = stub.ListCategories(empty_pb2.Empty())
+        print("\nList of Categories:")
+        for category in list_categories_response.categories:
+            print_category(category)
+            print("\n")
+
+        # Update the category
+        update_category_request = catalogue_pb2.UpdateCategoryRequest(
+            hash=category_response.hash,
+            name="Updated Test Category",
+            description="An updated test category",
+            parent_hash=""
+        )
+        update_category_response = stub.UpdateCategory(update_category_request)
+        print("Updated Category:")
+        print_category(update_category_response)
+
+        # Delete the category
+        delete_category_request = catalogue_pb2.DeleteCategoryRequest(hash=category_response.hash)
+        stub.DeleteCategory(delete_category_request)
+        print("\nDeleted Category")
 
 if __name__ == '__main__':
     run()

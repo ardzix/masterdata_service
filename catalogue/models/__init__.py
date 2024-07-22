@@ -7,6 +7,7 @@ class Category(models.Model):
     name = models.CharField(max_length=255)
     parent = models.ForeignKey('self', related_name='children', on_delete=models.SET_NULL, null=True, blank=True)
     description = models.TextField(blank=True, null=True)
+    hash = models.UUIDField(default=uuid.uuid4, editable=True, unique=True)
 
     def __str__(self):
         return self.name

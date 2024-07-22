@@ -3,8 +3,8 @@ import grpc
 import uuid
 from django.core.exceptions import ObjectDoesNotExist
 from google.protobuf import empty_pb2
-from catalogue.models import Product, ProductImage, ProductVariant, ProductAttribute
-from catalogue.serializers import ProductSerializer
+from catalogue.models import Product, ProductImage, ProductVariant, ProductAttribute, Category
+from catalogue.serializers import ProductSerializer, CategorySerializer
 from . import catalogue_pb2, catalogue_pb2_grpc
 
 class ProductService(catalogue_pb2_grpc.CatalogueServiceServicer):
@@ -184,3 +184,69 @@ class ProductService(catalogue_pb2_grpc.CatalogueServiceServicer):
         for product in products:
             response.products.append(self._get_product_response(product))
         return response
+
+
+    # Category related methods
+    def GetCategory(self, request, context):
+        try:
+            category = Category.objects.get(hash=request.hash)
+            return self._get_category_response(category)
+        except ObjectDoesNotExist:
+            context.abort(grpc.StatusCode.NOT_FOUND, "Category not found")
+
+    def CreateCategory(self, request, context):
+        parent = Category.objects.get(hash=request.parent_hash) if request.parent_hash else None
+        data = {
+            "name": request.name,
+            "description": request.description,
+            "parent": parent,
+            "hash": str(uuid.uuid4())
+        }
+        serializer = CategorySerializer(data=data)
+        if serializer.is_valid():
+            category = serializer.save()
+            return self._get_category_response(category)
+        else:
+            context.abort(grpc.StatusCode.INVALID_ARGUMENT, str(serializer.errors))
+
+    def UpdateCategory(self, request, context):
+        try:
+            category = Category.objects.get(hash=request.hash)
+            parent = Category.objects.get(hash=request.parent_hash) if request.parent_hash else None
+            data = {
+                "name": request.name,
+                "description": request.description,
+                "parent": parent
+            }
+            serializer = CategorySerializer(category, data=data, partial=True)
+            if serializer.is_valid():
+                category = serializer.save()
+                return self._get_category_response(category)
+            else:
+                context.abort(grpc.StatusCode.INVALID_ARGUMENT, str(serializer.errors))
+        except ObjectDoesNotExist:
+            context.abort(grpc.StatusCode.NOT_FOUND, "Category not found")
+
+    def DeleteCategory(self, request, context):
+        try:
+            category = Category.objects.get(hash=request.hash)
+            category.delete()
+            return empty_pb2.Empty()
+        except ObjectDoesNotExist:
+            context.abort(grpc.StatusCode.NOT_FOUND, "Category not found")
+
+    def ListCategories(self, request, context):
+        categories = Category.objects.all()
+        response = catalogue_pb2.ListCategoriesResponse()
+        for category in categories:
+            response.categories.append(self._get_category_response(category))
+        return response
+
+    def _get_category_response(self, category):
+        parent_hash = category.parent.hash if category.parent else ""
+        return catalogue_pb2.CategoryResponse(
+            hash=str(category.hash),
+            name=category.name,
+            description=category.description,
+            parent_hash=parent_hash
+        )
