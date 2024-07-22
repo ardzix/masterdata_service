@@ -31,19 +31,19 @@ class ChannelSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     channel_hash = serializers.CharField(source='channel.hash')
-    brand_hashes = serializers.SerializerMethodField()
+    brand_hashes = serializers.ListField()
 
     class Meta:
         model = Event
         fields = ['hash', 'name', 'description', 'start_date', 'end_date', 'channel_hash', 'brand_hashes']
 
-    def get_brand_hashes(self, obj):
-        return [str(brand.hash) for brand in obj.brands.all()]
-
     def create(self, validated_data):
+        brand_hashes = validated_data.pop('brand_hashes', None)
         channel_hash = validated_data.pop('channel').get('hash') if validated_data.get('channel', None) else None
         channel = Channel.objects.get(hash=channel_hash)
         event = Event.objects.create(channel=channel, **validated_data)
+        if brand_hashes:
+            event.brands.set(Brand.objects.filter(hash__in=brand_hashes))
         return event
 
     def update(self, instance, validated_data):
