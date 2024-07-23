@@ -1,6 +1,9 @@
 # catalogue
 catalogue/migrations/*
 !catalogue/migrations/__init__.py
+# channel
+channel/migrations/*
+!channel/migrations/__init__.py
 
 #src folder
 src/
