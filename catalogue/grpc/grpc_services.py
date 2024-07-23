@@ -1,11 +1,16 @@
 # grpc_services.py
 import grpc
 import uuid
+import logging
 from django.core.exceptions import ObjectDoesNotExist
 from google.protobuf import empty_pb2
 from catalogue.models import Product, ProductImage, ProductVariant, ProductAttribute, Category
 from catalogue.serializers import ProductSerializer, CategorySerializer
 from . import catalogue_pb2, catalogue_pb2_grpc
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class ProductService(catalogue_pb2_grpc.CatalogueServiceServicer):
     def _get_request_data(self, request):
@@ -75,6 +80,7 @@ class ProductService(catalogue_pb2_grpc.CatalogueServiceServicer):
         )
 
     def GetProduct(self, request, context):
+        logger.info(f"Received GetProduct request with req: {request}")
         try:
             product = Product.objects.get(hash=request.hash)
             return self._get_product_response(product)
@@ -82,6 +88,7 @@ class ProductService(catalogue_pb2_grpc.CatalogueServiceServicer):
             context.abort(grpc.StatusCode.NOT_FOUND, "Product not found")
 
     def CreateProduct(self, request, context):
+        logger.info(f"Received CreateProduct request with req: {request}")
         data = self._get_request_data(request)
         serializer = ProductSerializer(data=data)
         if serializer.is_valid():
@@ -122,6 +129,7 @@ class ProductService(catalogue_pb2_grpc.CatalogueServiceServicer):
             context.abort(grpc.StatusCode.INVALID_ARGUMENT, str(serializer.errors))
 
     def UpdateProduct(self, request, context):
+        logger.info(f"Received UpdateProduct request with req: {request}")
         try:
             product = Product.objects.get(hash=request.hash)
             data = self._get_request_data(request)
@@ -171,6 +179,7 @@ class ProductService(catalogue_pb2_grpc.CatalogueServiceServicer):
             context.abort(grpc.StatusCode.NOT_FOUND, "Product not found")
 
     def DeleteProduct(self, request, context):
+        logger.info(f"Received DeleteProduct request with req: {request}")
         try:
             product = Product.objects.get(hash=request.hash)
             product.delete()
@@ -179,6 +188,7 @@ class ProductService(catalogue_pb2_grpc.CatalogueServiceServicer):
             context.abort(grpc.StatusCode.NOT_FOUND, "Product not found")
 
     def ListProducts(self, request, context):
+        logger.info(f"Received ListProducts request with req: {request}")
         products = Product.objects.all()
         response = catalogue_pb2.ListProductsResponse()
         for product in products:
@@ -188,6 +198,7 @@ class ProductService(catalogue_pb2_grpc.CatalogueServiceServicer):
 
     # Category related methods
     def GetCategory(self, request, context):
+        logger.info(f"Received GetCategory request with req: {request}")
         try:
             category = Category.objects.get(hash=request.hash)
             return self._get_category_response(category)
@@ -195,7 +206,8 @@ class ProductService(catalogue_pb2_grpc.CatalogueServiceServicer):
             context.abort(grpc.StatusCode.NOT_FOUND, "Category not found")
 
     def CreateCategory(self, request, context):
-        parent = Category.objects.get(hash=request.parent_hash) if request.parent_hash else None
+        logger.info(f"Received CreateCategory request with req: {request}")
+        parent = Category.objects.get(hash=request.parent_hash).pk if request.parent_hash else None
         data = {
             "name": request.name,
             "description": request.description,
@@ -210,6 +222,7 @@ class ProductService(catalogue_pb2_grpc.CatalogueServiceServicer):
             context.abort(grpc.StatusCode.INVALID_ARGUMENT, str(serializer.errors))
 
     def UpdateCategory(self, request, context):
+        logger.info(f"Received UpdateCategory request with req: {request}")
         try:
             category = Category.objects.get(hash=request.hash)
             parent = Category.objects.get(hash=request.parent_hash) if request.parent_hash else None
@@ -228,6 +241,7 @@ class ProductService(catalogue_pb2_grpc.CatalogueServiceServicer):
             context.abort(grpc.StatusCode.NOT_FOUND, "Category not found")
 
     def DeleteCategory(self, request, context):
+        logger.info(f"Received DeleteCategory request with req: {request}")
         try:
             category = Category.objects.get(hash=request.hash)
             category.delete()
@@ -236,6 +250,7 @@ class ProductService(catalogue_pb2_grpc.CatalogueServiceServicer):
             context.abort(grpc.StatusCode.NOT_FOUND, "Category not found")
 
     def ListCategories(self, request, context):
+        logger.info(f"Received ListCategories request with req: {request}")
         categories = Category.objects.all()
         response = catalogue_pb2.ListCategoriesResponse()
         for category in categories:
@@ -248,5 +263,5 @@ class ProductService(catalogue_pb2_grpc.CatalogueServiceServicer):
             hash=str(category.hash),
             name=category.name,
             description=category.description,
-            parent_hash=parent_hash
+            parent_hash=str(parent_hash)
         )

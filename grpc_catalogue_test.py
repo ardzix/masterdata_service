@@ -197,6 +197,16 @@ def run():
         print("\nRetrieved Category:")
         print_category(get_category_response)
 
+        # Create a new child category
+        create_category_request = catalogue_pb2.CreateCategoryRequest(
+            name="Test Child Category",
+            description="A test child category",
+            parent_hash=category_response.hash
+        )
+        category_response = stub.CreateCategory(create_category_request)
+        print("Created Category:")
+        print_category(category_response)
+
         # List all categories
         list_categories_response = stub.ListCategories(empty_pb2.Empty())
         print("\nList of Categories:")
