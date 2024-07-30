@@ -24,8 +24,8 @@ message GetProductRequest {
 message CreateProductRequest {
     string name = 1;
     string description = 2;
-    int32 category_id = 3;
-    int32 brand_id = 4;
+    string category_hash = 3;
+    string brand_hash = 4;
     double base_price = 5;
     int32 stock = 6;
     string sku = 7;
@@ -42,8 +42,8 @@ message UpdateProductRequest {
     string hash = 1;
     string name = 2;
     string description = 3;
-    int32 category_id = 4;
-    int32 brand_id = 5;
+    string category_hash = 4;
+    string brand_hash = 5;
     double base_price = 6;
     int32 stock = 7;
     string sku = 8;
@@ -84,8 +84,8 @@ message ProductResponse {
     string hash = 1;
     string name = 2;
     string description = 3;
-    int32 category_id = 4;
-    int32 brand_id = 5;
+    string category_hash = 4;
+    string brand_hash = 5;
     double base_price = 6;
     int32 stock = 7;
     string sku = 8;
