@@ -66,8 +66,9 @@ class ProductService(catalogue_pb2_grpc.CatalogueServiceServicer):
             hash=str(product.hash),
             name=product.name,
             description=product.description,
-            category_hash=str(product.category.hash) if product.category else 0,
-            brand_hash=str(product.brand.hash) if product.brand else 0,
+            category_hash=str(product.category.hash) if product.category else None,
+            brand_hash=str(product.brand.hash)
+             if product.brand else None,
             base_price=product.base_price,
             stock=product.stock,
             sku=product.sku,
