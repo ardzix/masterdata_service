@@ -21,7 +21,7 @@ ENV PYTHONUNBUFFERED 1
 # RUN python manage.py collectstatic --noinput
 
 # Expose port 8000 and 50051
-EXPOSE 8000 50051
+EXPOSE 50051 50052
 
 # Run the command to start uWSGI
 CMD ["sh", "-c", "python manage.py migrate && python server.py"]
