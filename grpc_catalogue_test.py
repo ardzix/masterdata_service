@@ -105,7 +105,6 @@ def run():
             weight=0.5,
             dimensions="10x10x10",
             is_active=True,
-            hash=str(uuid.uuid4()),
             images=[
                 catalogue_pb2.ProductImage(
                     image_url="http://example.com/image1.jpg",

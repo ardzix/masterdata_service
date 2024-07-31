@@ -32,10 +32,9 @@ message CreateProductRequest {
     double weight = 8;
     string dimensions = 9;
     bool is_active = 10;
-    string hash = 11;
-    repeated ProductImage images = 12;
-    repeated ProductAttribute attributes = 13;
-    repeated ProductVariant variants = 14;
+    repeated ProductImage images = 11;
+    repeated ProductAttribute attributes = 12;
+    repeated ProductVariant variants = 13;
 }
 
 message UpdateProductRequest {

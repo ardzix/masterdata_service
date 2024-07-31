@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 class ProductService(catalogue_pb2_grpc.CatalogueServiceServicer):
     def _get_request_data(self, request):
-        return {
+        request_data = {
             "name": request.name,
             "description": request.description,
             "category_hash": request.category_hash,
@@ -25,8 +25,10 @@ class ProductService(catalogue_pb2_grpc.CatalogueServiceServicer):
             "weight": request.weight,
             "dimensions": request.dimensions,
             "is_active": request.is_active,
-            "hash": request.hash if request.hash else None,
         }
+        if hasattr(request, 'hash'):
+            request_data['hash'] = request.hash
+        return request_data
 
     def _get_product_response(self, product):
         images = ProductImage.objects.filter(product=product)
